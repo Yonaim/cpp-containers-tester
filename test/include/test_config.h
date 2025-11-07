@@ -2,6 +2,7 @@
 #define TEST_CONFIG_H
 
 #ifdef STD_MODE
+    namespace std {}
     namespace ft = std;
 #endif
 
