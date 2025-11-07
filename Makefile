@@ -20,7 +20,7 @@ MAKEFLAGS += --no-print-directory
 CXX				= c++
 CXXSTDFLAG		= -std=$(CXXSTD)
 CXXFLAGS		= $(CXXSTDFLAG) -MMD -MP -Wall -Wextra -Werror $(NAMESPACE_FLAG) $(SANITIZE_FLAG)
-# SANITIZE_FLAG  = -fsanitize=address
+SANITIZE_FLAG  = -fsanitize=address
 
 CPPFLAGS		= -I./$(CONTAINERS_PATH) -I./test/include
 LDFLAGS			=
@@ -94,9 +94,6 @@ make_stress:
 
 # =========================== UNIT TEST TARGETS ============================== #
 
-unit_all:
-	$(MAKE) make_unit TEST_NAME=unit_all TEST_UTILS=1 TEST_VECTOR=1 TEST_MAP=1 TEST_STACK=1
-
 unit_utils:
 	$(MAKE) make_unit TEST_NAME=unit_utils TEST_UTILS=1
 
@@ -110,9 +107,6 @@ unit_stack:
 	$(MAKE) make_unit TEST_NAME=unit_stack TEST_STACK=1
 
 # ======================== STRESS TEST TARGETS =============================== #
-
-stress_all:
-	$(MAKE) make_stress TEST_NAME=stress_all TEST_VECTOR=1 TEST_MAP=1 TEST_STACK=1
 
 stress_vector:
 	$(MAKE) make_stress TEST_NAME=stress_vector TEST_VECTOR=1
