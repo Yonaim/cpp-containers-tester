@@ -40,6 +40,9 @@ void test_vector_resize_reserve();
 // ===========================================================
 // Map
 // ===========================================================
+void test_map_part_1();
+void test_map_part_2();
+void test_map_part_3();
 void test_map_bounds();
 void test_map_clear_swap();
 void test_map_compare();
@@ -49,17 +52,16 @@ void test_map_find_bracket();
 void test_map_insert_balance();
 void test_map_insert_plain();
 void test_map_iterators_basic();
-void test_map_parts();
 void test_map_rbt_node();
 
 // ===========================================================
 // Stack
 // ===========================================================
+void test_stack();
 void test_stack_comparisons();
 void test_stack_comparisons_strict();
 void test_stack_constructors_empty_size();
 void test_stack_exception_safety();
-void test_stack_parts();
 void test_stack_performance_smoke();
 void test_stack_push_top_pop();
 void test_stack_types_strings();
