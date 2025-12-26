@@ -8,6 +8,7 @@ CXXSTD         := c++98
 CONTAINERS_PATH= # TODO: include your implemented containers path
 ifeq ($(NAMESPACE),std)
   NAMESPACE_FLAG := -DSTD_MODE=1
+  CXXSTD 		  = c++11
 else
   NAMESPACE_FLAG :=
 endif
