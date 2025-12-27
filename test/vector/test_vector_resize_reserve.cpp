@@ -2,13 +2,8 @@
 #include <cassert>
 #include <iostream>
 #include "test_config.h"
+#include "test_namespace.h"
 #include "test_print.h"
-#ifdef STD_MODE
-    #include <vector>
-namespace ft = std;
-#else
-    #include "vector.h"
-#endif
 
 static void dump(const ft::vector<int> &v, const char *tag)
 {

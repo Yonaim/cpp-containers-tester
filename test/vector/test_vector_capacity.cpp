@@ -1,13 +1,8 @@
 // test_vector_capacity.cpp
 #include <iostream>
 #include "test_config.h"
+#include "test_namespace.h"
 #include "test_print.h"
-#ifdef STD_MODE
-  #include <vector>
-  namespace ft = std;
-#else
-  #include "vector.h"
-#endif
 
 void test_vector_capacity()
 {

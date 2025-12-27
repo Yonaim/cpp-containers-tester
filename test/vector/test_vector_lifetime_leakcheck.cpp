@@ -1,29 +1,31 @@
 // test_vector_lifetime_leakcheck.cpp
-#include <iostream>
 #include <cassert>
+#include <iostream>
 #include "test_config.h"
+#include "test_namespace.h"
 #include "test_print.h"
-#ifdef STD_MODE
-  #include <vector>
-  namespace ft = std;
-#else
-  #include "vector.h"
-#endif
 
-struct Counted {
+struct Counted
+{
     static int alive;
-    int x;
-    Counted(): x(0) { ++alive; }
-    Counted(int v): x(v) { ++alive; }
-    Counted(const Counted& c): x(c.x) { ++alive; }
-    Counted& operator=(const Counted& c) { x=c.x; return *this; }
+    int        x;
+    Counted() : x(0) { ++alive; }
+    Counted(int v) : x(v) { ++alive; }
+    Counted(const Counted &c) : x(c.x) { ++alive; }
+    Counted &operator=(const Counted &c)
+    {
+        x = c.x;
+        return *this;
+    }
     ~Counted() { --alive; }
 };
 int Counted::alive = 0;
 
-static void dump(const ft::vector<Counted>& v, const char* tag) {
+static void dump(const ft::vector<Counted> &v, const char *tag)
+{
     std::cout << tag << " [size=" << v.size() << ", alive=" << Counted::alive << "]: ";
-    for (size_t i=0;i<v.size();++i) std::cout << v[i].x << ' ';
+    for (size_t i = 0; i < v.size(); ++i)
+        std::cout << v[i].x << ' ';
     std::cout << '\n';
 }
 
@@ -35,13 +37,14 @@ void test_vector_lifetime_leakcheck()
     assert(Counted::alive == 0);
     {
         ft::vector<Counted> v;
-        for (int i=0;i<8;++i) v.push_back(Counted(i));
+        for (int i = 0; i < 8; ++i)
+            v.push_back(Counted(i));
         assert(Counted::alive == 8);
         dump(v, "init");
 
-        v.erase(v.begin()+3);
+        v.erase(v.begin() + 3);
         assert(Counted::alive == 7);
-        v.erase(v.begin(), v.begin()+2);
+        v.erase(v.begin(), v.begin() + 2);
         assert(Counted::alive == 5);
         dump(v, "after erases");
 
