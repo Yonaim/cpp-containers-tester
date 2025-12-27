@@ -68,6 +68,7 @@ class MutantStack : public ft::stack<T>
 // ====================== MAIN ====================== //
 int main(int argc, char **argv)
 {
+    std::cout.setf(std::ios::unitbuf);
     if (argc != 2)
     {
         std::cerr << "Usage: ./test <seed>" << std::endl;

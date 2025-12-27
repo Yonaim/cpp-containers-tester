@@ -1,3 +1,4 @@
+#include <iostream>
 #include "test_config.h"
 #include "test_core.h"
 #include "test_print.h"
@@ -37,6 +38,7 @@
 
 int main()
 {
+    std::cout.setf(std::ios::unitbuf);
     // ===== Utils =====
 #if TEST_UTILS_PART_1 || TEST_UTILS_PART_2
     print_module_banner("Utils Tests");
