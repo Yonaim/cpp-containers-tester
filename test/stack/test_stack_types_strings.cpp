@@ -1,8 +1,8 @@
+#include <cassert>
+#include <string>
 #include "test_config.h"
 #include "test_namespace.h"
 #include "test_print.h"
-#include <string>
-#include <cassert>
 
 void test_stack_types_strings()
 {
@@ -15,8 +15,8 @@ void test_stack_types_strings()
     s.push("CSE");
 
     std::cout << "Top: " << s.top() << '\n';
-    assert(s.top()=="CSE");
+    assert(s.top() == "CSE");
     s.pop();
     std::cout << "After pop(): top=" << s.top() << ", size=" << s.size() << '\n';
-    assert(s.top()=="University");
+    assert(s.top() == "University");
 }

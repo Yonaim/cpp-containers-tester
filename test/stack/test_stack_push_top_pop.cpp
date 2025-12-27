@@ -1,7 +1,7 @@
+#include <cassert>
 #include "test_config.h"
 #include "test_namespace.h"
 #include "test_print.h"
-#include <cassert>
 
 void test_stack_push_top_pop()
 {
@@ -9,11 +9,11 @@ void test_stack_push_top_pop()
     print_section("push / top / pop");
 
     ft::stack<int> s;
-    for (int i=1;i<=5;++i) {
-        s.push(i*10);
-        std::cout << "push(" << i*10 << ") → top=" << s.top()
-                  << ", size=" << s.size() << '\n';
-        assert(s.top()==i*10);
+    for (int i = 1; i <= 5; ++i)
+    {
+        s.push(i * 10);
+        std::cout << "push(" << i * 10 << ") → top=" << s.top() << ", size=" << s.size() << '\n';
+        assert(s.top() == i * 10);
     }
 
     print_section("After push()");

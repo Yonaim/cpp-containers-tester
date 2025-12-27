@@ -1,10 +1,10 @@
 #include "test_print.h"
 
 #ifndef TEST_STACK
-#  define TEST_STACK 0
+    #define TEST_STACK 0
 #endif
 #ifndef TEST_STACK_ADV
-#  define TEST_STACK_ADV 0
+    #define TEST_STACK_ADV 0
 #endif
 
 #if TEST_STACK

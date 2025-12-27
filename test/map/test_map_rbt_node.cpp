@@ -3,7 +3,6 @@
 #include "test_namespace.h"
 #include "test_print.h"
 
-
 void test_map_rbt_node()
 {
     FILE_BANNER();

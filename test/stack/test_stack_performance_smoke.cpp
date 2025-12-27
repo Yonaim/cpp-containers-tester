@@ -8,8 +8,10 @@ void test_stack_performance_smoke()
     print_section("Performance smoke — push/pop N");
 
     ft::stack<int> s;
-    const int N = 50000;
-    for (int i=0;i<N;++i) s.push(i);
-    for (int i=0;i<N;++i) s.pop();
+    const int      N = 50000;
+    for (int i = 0; i < N; ++i)
+        s.push(i);
+    for (int i = 0; i < N; ++i)
+        s.pop();
     print_bool(s.empty());
 }

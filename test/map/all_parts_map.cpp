@@ -1,13 +1,13 @@
 #include "test_print.h"
 
 #ifndef TEST_MAP_PART_1
-#  define TEST_MAP_PART_1 0
+    #define TEST_MAP_PART_1 0
 #endif
 #ifndef TEST_MAP_PART_2
-#  define TEST_MAP_PART_2 0
+    #define TEST_MAP_PART_2 0
 #endif
 #ifndef TEST_MAP_PART_3
-#  define TEST_MAP_PART_3 0
+    #define TEST_MAP_PART_3 0
 #endif
 
 #if TEST_MAP_PART_1
