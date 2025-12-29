@@ -5,28 +5,23 @@ NAME          := containers
 
 NAMESPACE      ?= ft
 CXXSTD         := c++98
-FT_INC_DIR     := ../../include/ft
-CONTAINERS_PATH = \
-					$(FT_INC_DIR) \
-					$(FT_INC_DIR)/algorithm \
-					$(FT_INC_DIR)/functional \
-					$(FT_INC_DIR)/type_traits \
-					$(FT_INC_DIR)/iterator \
-					$(FT_INC_DIR)/tree \
-					$(FT_INC_DIR)/allocator \
-					$(FT_INC_DIR)/utility \
-					$(FT_INC_DIR)/container
+
+THIS_MAKEFILE := $(lastword $(MAKEFILE_LIST))
+MKDIR         := $(dir $(abspath $(THIS_MAKEFILE)))
+# TODO: include your implemented containers path (relative to this Makefile)
+YOUR_IMPL_PATH = $(abspath $(MKDIR)/) # ex) $(abspath $(MKDIR)/../../include/ft)  
+
+MAKEFLAGS += --no-print-directory
+
+# ================================ COMPILER ================================== #
+
+CXX := c++
 ifeq ($(NAMESPACE),std)
   NAMESPACE_FLAG := -DSTD_MODE=1 # 내부적으로 분기 처리함 (기본값: ft)
   CXXSTD         = c++11
 else
   NAMESPACE_FLAG :=
 endif
-MAKEFLAGS += --no-print-directory
-
-# ================================ COMPILER ================================== #
-
-CXX        := c++
 CXXSTDFLAG := -std=$(CXXSTD)
 
 # BASIC
@@ -46,6 +41,11 @@ CXXFLAGS_STRESS := $(CXXSTDFLAG) -MMD -MP -Wall -Wextra -Werror $(NAMESPACE_FLAG
 CXXFLAGS_PERF 	:= $(CXXSTDFLAG) -MMD -MP -Wall -Wextra -Werror $(NAMESPACE_FLAG) $(PERF_OPT_FLAGS) $(PERF_SANITIZE_FLAG)
 
 # Preprocess and Link
+ifneq ($(filter clean fclean re,$(MAKECMDGOALS)),)
+  CONTAINERS_PATH :=
+else
+  CONTAINERS_PATH := $(shell test -d "$(YOUR_IMPL_PATH)" && find "$(YOUR_IMPL_PATH)" -type d -print)
+endif
 CPPFLAGS   := $(addprefix -I,$(CONTAINERS_PATH)) -I./include
 LDFLAGS    :=
 LDLIBS     :=
