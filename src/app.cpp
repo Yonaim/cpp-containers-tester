@@ -122,6 +122,7 @@ static bool run_menu()
     }
     std::string module_sel = modules[(size_t)m];
 
+    std::cout << '\n';
     int g = -2;
     while (g == -2)
     {
@@ -142,8 +143,8 @@ static bool run_menu()
 
     std::vector<std::string> group_all;
     group_all.push_back("basic");
-    group_all.push_back("perf");
     group_all.push_back("stress");
+    group_all.push_back("perf");
 
     expand_selection(module_sel, module_all, module_list);
     expand_selection(group_sel, group_all, group_list);
