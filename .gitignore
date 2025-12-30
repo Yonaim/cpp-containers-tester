@@ -1,3 +1,6 @@
+containers-tester
 logs
 bin
 *.log
+*.o
+*.d
