@@ -1,6 +1,7 @@
 #include "test_config.h"
 #include "test_namespace.h"
 #include "test_print.h"
+#include <vector>
 
 void test_utils_basic_reverse_iterator()
 {

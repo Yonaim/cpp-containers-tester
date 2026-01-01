@@ -1,6 +1,7 @@
 #include "test_config.h"
 #include "test_namespace.h"
 #include "test_print.h"
+#include <vector>
 
 // named requirements의 일종인 'BinaryPredicate'를 만족해야함
 // https://en.cppreference.com/w/cpp/named_req/BinaryPredicate.html

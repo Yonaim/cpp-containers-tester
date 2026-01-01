@@ -1,6 +1,7 @@
 #include "test_config.h"
 #include "test_namespace.h"
 #include "test_print.h"
+#include <vector>
 
 // Compare 함수
 // named requirements의 일종인 'Compare'를 만족해야 함

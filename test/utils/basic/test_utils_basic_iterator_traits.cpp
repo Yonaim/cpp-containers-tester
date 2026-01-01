@@ -2,6 +2,7 @@
 #include "test_namespace.h"
 #include "test_print.h"
 #include "type_name_string.h"
+#include <vector>
 
 void test_utils_basic_iterator_traits()
 {
