@@ -9,7 +9,8 @@ CXXSTD         := c++98
 THIS_MAKEFILE := $(lastword $(MAKEFILE_LIST))
 MKDIR         := $(dir $(abspath $(THIS_MAKEFILE)))
 # TODO: include your implemented containers path (relative to this Makefile)
-YOUR_IMPL_PATH = $(abspath $(MKDIR)/../../include/ft)
+YOUR_IMPL_PATH = #/path/to/your/containers/include
+# ex) YOUR_IMPL_PATH = $(abspath $(MKDIR)/../../include/ft)
 
 MAKEFLAGS += --no-print-directory
 
@@ -25,15 +26,15 @@ endif
 CXXSTDFLAG := -std=$(CXXSTD)
 
 # BASIC
-BASIC_SANITIZE_FLAG ?= -fsanitize=address
+BASIC_SANITIZE_FLAG ?= -fsanitize=address -g3
 BASIC_OPT_FLAGS 	?=
 
 # STRESS
-STRESS_SANITIZE_FLAG ?= -fsanitize=address
+STRESS_SANITIZE_FLAG ?= -fsanitize=address -g3
 STRESS_OPT_FLAGS ?=
 
 # PERF
-PERF_SANITIZE_FLAG ?= -fsanitize=address
+PERF_SANITIZE_FLAG ?= -fsanitize=address -g3
 PERF_OPT_FLAGS ?= -O3 -DNDEBUG -march=native
 
 CXXFLAGS_COMMON	:= $(CXXSTDFLAG) -MMD -MP -Wall -Wextra -Werror 
