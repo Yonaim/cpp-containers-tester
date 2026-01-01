@@ -1,8 +1,8 @@
-### cpp-containers-tester
+# cpp-containers-tester
 
 Interactive test runner for C++ container implementations
 
-### Overview
+# Overview
 
 This repository provides an interactive CLI-based test runner to validate and compare custom STL-like container implementations against the standard library (`std`).
 
@@ -14,9 +14,7 @@ The runner is designed to support different categories of tests:
 
 (Currently, only basic tests available)
 
----
-
-### Required Configuration
+# Required Configuration
 
 Before using this runner, **you must configure the path to your own container implementation**.
 
@@ -34,9 +32,7 @@ YOUR_IMPL_PATH = /path/to/your/containers/include
 
 Without this configuration, the runner cannot build or test your implementation correctly.
 
----
-
-### Usage
+# Usage
 
 Build the runner:
 
