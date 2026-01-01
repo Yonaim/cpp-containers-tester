@@ -3,7 +3,7 @@ set -euo pipefail
 
 diff_usage_and_exit() {
     cat <<EOF
-Usage: $0 <basic|perf|stress> <vector|map|stack|utils> [--makefile PATH]
+Usage: $0 <basic|perf|stress> <utils|vector|map|stack> [--makefile PATH]
 EOF
     exit 0
 }
@@ -11,7 +11,7 @@ EOF
 diff_validate_group_module() {
     local group="$1" module="$2"
     case "${group}" in basic|perf|stress) ;; *) diff_die "Invalid group: ${group} (use basic|perf|stress)" ;; esac
-    case "${module}" in vector|map|stack|utils) ;; *) diff_die "Invalid module: ${module} (use vector|map|stack|utils)" ;; esac
+    case "${module}" in utils|vector|map|stack) ;; *) diff_die "Invalid module: ${module} (use vector|map|stack|utils)" ;; esac
 }
 
 # Prints: "GROUP|MODULE|MAKEFILE_PATH"
