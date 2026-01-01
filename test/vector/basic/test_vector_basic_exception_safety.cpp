@@ -1,4 +1,8 @@
-// test_vector_basic_exception_safety.cpp
+/*
+    insert / resize 도중 예외가 발생하면
+    vector는 이전 상태를 그대로 유지해야 한다 (strong guarantee)
+*/
+
 #include <cassert>
 #include <iostream>
 #include "test_config.h"
@@ -7,19 +11,17 @@
 
 struct Bomb
 {
-    static int copy_count;
-    static int throw_after;
-    int        value;
-    Bomb() : value(0) {}
-    Bomb(int v) : value(v) {}
+    static bool explode;
+    int         value;
+
+    Bomb(int v = 0) : value(v) {}
+
     Bomb(const Bomb &other) : value(other.value)
     {
-        ++copy_count;
-        if (throw_after >= 0 && copy_count > throw_after)
-        {
+        if (explode)
             throw 1;
-        }
     }
+
     Bomb &operator=(const Bomb &other)
     {
         value = other.value;
@@ -27,32 +29,22 @@ struct Bomb
     }
 };
 
-int Bomb::copy_count = 0;
-int Bomb::throw_after = -1;
-
-static void print_vec(const ft::vector<Bomb> &v, const char *tag)
-{
-    std::cout << tag << " [size=" << v.size() << "]: ";
-    for (size_t i = 0; i < v.size(); ++i)
-        std::cout << v[i].value << ' ';
-    std::cout << '\n';
-}
+bool Bomb::explode = false;
 
 void test_vector_basic_exception_safety()
 {
     FILE_BANNER();
-    print_section("exception safety — strong guarantee on insert/resize");
+    print_section("exception safety — strong guarantee");
 
     ft::vector<Bomb> v;
     for (int i = 0; i < 6; ++i)
         v.push_back(Bomb(i));
-    print_vec(v, "init");
-
-    Bomb::copy_count = 0;
-    Bomb::throw_after = 2;
 
     ft::vector<Bomb> snapshot(v);
-    bool             threw = false;
+
+    // ---------------- insert ----------------
+    Bomb::explode = true;
+    bool threw = false;
     try
     {
         v.insert(v.begin() + 2, Bomb(999));
@@ -61,15 +53,18 @@ void test_vector_basic_exception_safety()
     {
         threw = true;
     }
+    Bomb::explode = false;
+
     assert(threw);
     assert(v.size() == snapshot.size());
     for (size_t i = 0; i < v.size(); ++i)
         assert(v[i].value == snapshot[i].value);
+
     print_section("insert exception — strong guarantee holds");
 
-    Bomb::copy_count = 0;
-    Bomb::throw_after = 1;
+    // ---------------- resize (grow) ----------------
     snapshot = v;
+    Bomb::explode = true;
     threw = false;
     try
     {
@@ -79,16 +74,20 @@ void test_vector_basic_exception_safety()
     {
         threw = true;
     }
+    Bomb::explode = false;
+
     assert(threw);
     assert(v.size() == snapshot.size());
     for (size_t i = 0; i < v.size(); ++i)
         assert(v[i].value == snapshot[i].value);
+
     print_section("resize growth exception — strong guarantee holds");
 
-    Bomb::throw_after = -1;
+    // ---------------- resize (shrink) ----------------
     v.resize(3);
     assert(v.size() == 3);
     for (size_t i = 0; i < 3; ++i)
         assert(v[i].value == (int)i);
+
     print_section("resize shrink — OK");
 }
