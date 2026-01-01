@@ -99,16 +99,16 @@ static void print_help()
 static bool run_menu()
 {
     std::vector<std::string> modules;
+    modules.push_back("utils");
     modules.push_back("vector");
     modules.push_back("map");
-    modules.push_back("utils");
     modules.push_back("stack");
     modules.push_back("all");
 
     std::vector<std::string> groups;
     groups.push_back("basic");
-    groups.push_back("perf");
     groups.push_back("stress");
+    groups.push_back("perf");
     groups.push_back("all");
 
     int m = -2;
@@ -136,9 +136,9 @@ static bool run_menu()
 
     std::vector<std::string> module_list, group_list;
     std::vector<std::string> module_all;
+    module_all.push_back("utils");
     module_all.push_back("vector");
     module_all.push_back("map");
-    module_all.push_back("utils");
     module_all.push_back("stack");
 
     std::vector<std::string> group_all;
