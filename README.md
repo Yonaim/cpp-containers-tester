@@ -29,7 +29,7 @@ In the Makefile (or related configuration files), you will find a section simila
 You must update this to point to the directory containing your container headers (for example, your `ft/` implementation):
 
 ```make
-INCLUDE_PATHS += /path/to/your/containers/include
+YOUR_IMPL_PATH = /path/to/your/containers/include
 ```
 
 Without this configuration, the runner cannot build or test your implementation correctly.
