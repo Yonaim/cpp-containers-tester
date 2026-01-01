@@ -4,8 +4,8 @@ NAME := containers-tester
 # =============================== SETTINGS ================================ #
 
 CXX   := c++
-CXXSTD := c++98
-# WARN  := -Wall -Wextra -Werror
+CXXSTD := c++11
+WARN  := -Wall -Wextra -Werror
 OPT   ?= -O2
 
 CPPFLAGS := -Iinclude
