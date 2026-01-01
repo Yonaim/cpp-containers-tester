@@ -9,7 +9,7 @@ CXXSTD         := c++98
 THIS_MAKEFILE := $(lastword $(MAKEFILE_LIST))
 MKDIR         := $(dir $(abspath $(THIS_MAKEFILE)))
 # TODO: include your implemented containers path (relative to this Makefile)
-YOUR_IMPL_PATH = $(abspath $(MKDIR)/) # ex) $(abspath $(MKDIR)/../../include/ft)  
+YOUR_IMPL_PATH = $(abspath $(MKDIR)/../../include/ft)
 
 MAKEFLAGS += --no-print-directory
 
