@@ -36,15 +36,16 @@ STRESS_OPT_FLAGS ?=
 PERF_SANITIZE_FLAG ?= -fsanitize=address
 PERF_OPT_FLAGS ?= -O3 -DNDEBUG -march=native
 
-CXXFLAGS_BASIC 	:= $(CXXSTDFLAG) -MMD -MP -Wall -Wextra -Werror $(NAMESPACE_FLAG) $(BASIC_SANITIZE_FLAG)
-CXXFLAGS_STRESS := $(CXXSTDFLAG) -MMD -MP -Wall -Wextra -Werror $(NAMESPACE_FLAG) $(STRESS_OPT_FLAGS) $(STRESS_SANITIZE_FLAG)
-CXXFLAGS_PERF 	:= $(CXXSTDFLAG) -MMD -MP -Wall -Wextra -Werror $(NAMESPACE_FLAG) $(PERF_OPT_FLAGS) $(PERF_SANITIZE_FLAG)
+CXXFLAGS_COMMON	:= $(CXXSTDFLAG) -MMD -MP -Wall -Wextra -Werror 
+CXXFLAGS_BASIC 	:= $(CXXFLAGS_COMMON) $(NAMESPACE_FLAG) $(BASIC_SANITIZE_FLAG)
+CXXFLAGS_STRESS := $(CXXFLAGS_COMMON) $(NAMESPACE_FLAG) $(STRESS_OPT_FLAGS) $(STRESS_SANITIZE_FLAG)
+CXXFLAGS_PERF 	:= $(CXXFLAGS_COMMON) $(NAMESPACE_FLAG) $(PERF_OPT_FLAGS) $(PERF_SANITIZE_FLAG)
 
 # Preprocess and Link
 ifneq ($(filter clean fclean re,$(MAKECMDGOALS)),)
   CONTAINERS_PATH :=
 else
-  CONTAINERS_PATH := $(shell test -d "$(YOUR_IMPL_PATH)" && find "$(YOUR_IMPL_PATH)" -type d -print)
+  CONTAINERS_PATH := $(shell find "$(YOUR_IMPL_PATH)" -type d -print)
 endif
 CPPFLAGS   := $(addprefix -I,$(CONTAINERS_PATH)) -I./include
 LDFLAGS    :=
@@ -97,12 +98,12 @@ BASIC_UTILS_FILES := \
   test_utils_basic_reverse_iterator
 
 STRESS_UTILS_FILES := \
-  test_utils_stress_pair.cpp \
-  test_utils_stress_compare.cpp
+  test_utils_stress_pair \
+  test_utils_stress_compare
 
 PERF_UTILS_FILES := \
-  test_utils_perf_pair.cpp \
-  test_utils_perf_compare.cpp
+  test_utils_perf_pair \
+  test_utils_perf_compare
 
 BASIC_UTILS_SRCS  := \
   $(call mk_path,$(UTILS_BASIC_DIR),,$(BASIC_UTILS_FILES))
