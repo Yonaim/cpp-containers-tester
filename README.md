@@ -1,22 +1,51 @@
-# cpp_containers_test
+### cpp-containers-tester
 
-- cpp_containers 프로젝트를 위한 테스트 리소스
-- 기본 원리: namespace를 std/ft로 설정하여 출력 결과의 일치 여부를 리눅스 명령어 `diff`를 이용해 동일하게 동작하는지 확인
-- test는 크게 stress, unit 두 가지로 나뉨
-    - stress: 부하 테스트, ecole42 제공
-    - unit: 출력 결과 테스트, 직접 작성
+Interactive test runner for C++ container implementations
 
-## How to Use
+### Overview
 
-1. Makefile의 `CONTAINERS_PATH` 변수 값 설정
-2. `/test` 디렉토리 내 테스트하길 희망하는 모듈의 테스트 파일의 'TODO: include your implemented header file'을 완성
-2. `/script` 디렉토리 내 쉘 스크립트 파일 실행
+This repository provides an interactive CLI-based test runner to validate and compare custom STL-like container implementations against the standard library (`std`).
 
-## 특이사항
+The runner is designed to support different categories of tests:
 
-- std::enable_if는 C++11부터 존재하므로 utils unit test를 std namespace로 빌드하는 경우에만 C++11로 컴파일
+* **basic** tests focus on correctness and behavior
+* **stress** tests focus on robustness
+* **perf** tests focus on performance characteristics
 
-## TODO
+(Currently, only basic tests available)
 
-- `*.d` 파일 처리
-- script 파일 실행시 현 디렉토리가 아닌 다른 디렉토리에서 실행 가능하도록 변경
+---
+
+### Required Configuration
+
+Before using this runner, **you must configure the path to your own container implementation**.
+
+In the Makefile (or related configuration files), you will find a section similar to:
+
+```make
+# TODO: include your implemented containers path
+```
+
+You must update this to point to the directory containing your container headers (for example, your `ft/` implementation):
+
+```make
+INCLUDE_PATHS += /path/to/your/containers/include
+```
+
+Without this configuration, the runner cannot build or test your implementation correctly.
+
+---
+
+### Usage
+
+Build the runner:
+
+```bash
+make
+```
+
+Run from the repository root:
+
+```bash
+./containers-tester
+```
