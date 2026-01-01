@@ -48,10 +48,13 @@ diff_make_build_one() {
     local make_dir="$1" make_file="$2" make_target="$3" module="$4" ns="$5"
     local -a extra=()
 
-    # Keep old rule: utils built with C++11
+    # built with C++11 for std
+    if [[ "${ns}" == "std" ]]; then
+        echo -e "${DIFF_CY}→ Using CXXSTD=c++11 for std build${DIFF_C0}"
+    fi
+    # no deprecated declarations error for utils build
     if [[ "${module}" == "utils" ]]; then
-        extra+=( "CXXSTD=c++11" )
-        echo -e "${DIFF_CY}→ Using CXXSTD=c++11 for utils build${DIFF_C0}"
+        extra+=( "CXXFLAGS_COMMON+=-Wno-deprecated-declarations" )
     fi
 
     echo -e "${DIFF_CY}→ Building ${ns}: make ${make_target}${DIFF_C0}"
