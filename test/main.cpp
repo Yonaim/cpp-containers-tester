@@ -7,41 +7,6 @@ void test_vector_dispatch();
 void test_map_dispatch();
 void test_stack_dispatch();
 
-// ================================ Main ================================ //
-
-int main()
-{
-    std::cout.setf(std::ios::unitbuf); // for debug
-
-    // ===== Utils =====
-#if TEST_UTILS_BASIC || TEST_UTILS_STRESS || TEST_UTILS_PERF
-    print_module_banner("Utils Tests");
-    test_utils_dispatch();
-#endif
-
-    // ===== Vector =====
-#if TEST_VECTOR_BASIC || TEST_VECTOR_STRESS || TEST_VECTOR_PERF
-    print_module_banner("Vector Tests");
-    test_vector_dispatch();
-#endif
-
-    // ===== Map =====
-#if TEST_MAP_BASIC || TEST_MAP_STRESS || TEST_MAP_PERF
-    print_module_banner("Map Tests");
-    test_map_dispatch();
-#endif
-
-    // ===== Stack =====
-#if TEST_STACK_BASIC || TEST_STACK_STRESS || TEST_STACK_PERF
-    print_module_banner("Stack Tests");
-    test_stack_dispatch();
-#endif
-
-    return 0;
-}
-
-#include "test_print.h"
-
 // ============================= Prototypes ============================= //
 // NOTE: 파일명이 대표 함수명
 
@@ -54,7 +19,6 @@ void test_utils_basic_enable_if();
 void test_utils_basic_is_integral();
 void test_utils_basic_iterator_traits();
 void test_utils_basic_reverse_iterator();
-void test_utils_basic_parts();
 #endif
 
 #if TEST_UTILS_STRESS
@@ -92,6 +56,7 @@ void test_vector_basic_reallocation_stats();
 void test_vector_stress_push_back();
 void test_vector_stress_insert();
 void test_vector_stress_erase();
+void test_vector_stress_buffer_ram();
 #endif
 
 #if TEST_VECTOR_PERF
@@ -117,6 +82,7 @@ void test_map_basic_compare();
 #if TEST_MAP_STRESS
 void test_map_stress_insert();
 void test_map_stress_erase();
+void test_map_stress_sum_determinism();
 #endif
 
 #if TEST_MAP_PERF
@@ -138,11 +104,44 @@ void test_stack_basic_performance_smoke();
 
 #if TEST_STACK_STRESS
 void test_stack_stress_push_pop();
+void test_stack_stress_mutant_iter();
 #endif
 
 #if TEST_STACK_PERF
 void test_stack_perf_push_pop();
 #endif
+
+// ================================ Main ================================ //
+
+int main()
+{
+    std::cout.setf(std::ios::unitbuf); // for debug
+
+    // ===== Utils =====
+#if TEST_UTILS_BASIC || TEST_UTILS_STRESS || TEST_UTILS_PERF
+    print_module_banner("Utils Tests");
+    test_utils_dispatch();
+#endif
+
+    // ===== Vector =====
+#if TEST_VECTOR_BASIC || TEST_VECTOR_STRESS || TEST_VECTOR_PERF
+    print_module_banner("Vector Tests");
+    test_vector_dispatch();
+#endif
+
+    // ===== Map =====
+#if TEST_MAP_BASIC || TEST_MAP_STRESS || TEST_MAP_PERF
+    print_module_banner("Map Tests");
+    test_map_dispatch();
+#endif
+
+    // ===== Stack =====
+#if TEST_STACK_BASIC || TEST_STACK_STRESS || TEST_STACK_PERF
+    print_module_banner("Stack Tests");
+    test_stack_dispatch();
+#endif
+    return 0;
+}
 
 // ============================= Group runners ============================= //
 
@@ -157,7 +156,6 @@ void test_utils_dispatch()
     test_utils_basic_is_integral();
     test_utils_basic_iterator_traits();
     test_utils_basic_reverse_iterator();
-    test_utils_basic_parts();
 #else
     (void)0;
 #endif
@@ -209,6 +207,7 @@ void test_vector_dispatch()
     test_vector_stress_push_back();
     test_vector_stress_insert();
     test_vector_stress_erase();
+    test_vector_stress_buffer_ram();
 #else
     (void)0;
 #endif
@@ -245,6 +244,7 @@ void test_map_dispatch()
     print_section("Map STRESS");
     test_map_stress_insert();
     test_map_stress_erase();
+    test_map_stress_sum_determinism();
 #else
     (void)0;
 #endif
@@ -277,6 +277,7 @@ void test_stack_dispatch()
 #if TEST_STACK_STRESS
     print_section("Stack STRESS");
     test_stack_stress_push_pop();
+    test_stack_stress_mutant_iter();
 #else
     (void)0;
 #endif
