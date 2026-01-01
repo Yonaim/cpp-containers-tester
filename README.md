@@ -6,7 +6,7 @@ Interactive test runner for C++ container implementations
 
 This repository provides an interactive CLI-based test runner to validate and compare custom STL-like container implementations against the standard library (`std`).
 
-The runner is designed to support different categories of tests:
+The runner is designed to support three different categories of tests:
 
 * **basic** tests focus on correctness and behavior
 * **stress** tests focus on robustness
