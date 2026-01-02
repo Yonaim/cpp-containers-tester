@@ -7,7 +7,7 @@
 
 static void dump(const ft::vector<int> &v, const char *tag)
 {
-    std::cout << tag << " [size=" << v.size() << ", cap=" << v.capacity() << "]: ";
+    std::cout << tag << " [size=" << v.size() << "]: ";
     for (size_t i = 0; i < v.size(); ++i)
         std::cout << v[i] << ' ';
     std::cout << '\n';

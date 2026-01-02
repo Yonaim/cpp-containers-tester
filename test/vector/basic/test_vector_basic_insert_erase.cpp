@@ -7,7 +7,7 @@
 
 static void show(const ft::vector<int> &v, const char *title)
 {
-    std::cout << title << " [size=" << v.size() << ", cap=" << v.capacity() << "]: ";
+    std::cout << title << " [size=" << v.size() << "]: ";
     for (size_t i = 0; i < v.size(); ++i)
         std::cout << v[i] << ' ';
     std::cout << '\n';
