@@ -46,6 +46,7 @@ run: $(NAME)
 
 clean:
 	rm -f $(OBJS) $(DEPS)
+	make clean -C ./test
 
 fclean: clean
 	rm -f $(NAME)
