@@ -1,4 +1,8 @@
-// test_vector_basic_lifetime_leakcheck.cpp
+/*
+    vector가 표준이 요구하는 construct, destroy 시점을 정확히 지키는지를
+    객체 개수 불변식(alive == size) 으로 검증하는 테스트
+*/
+
 #include <cassert>
 #include <iostream>
 #include "test_config.h"

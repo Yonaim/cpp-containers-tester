@@ -3,6 +3,8 @@
     vector는 이전 상태를 그대로 유지해야 한다 (strong guarantee)
 */
 
+// If an exception is thrown, all objects constructed so far are destroyed.
+
 #include <cassert>
 #include <iostream>
 #include "test_config.h"
