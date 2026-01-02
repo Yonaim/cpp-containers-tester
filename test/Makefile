@@ -177,7 +177,12 @@ BASIC_MAP_FILES := \
   test_map_basic_clear_swap \
   test_map_basic_count \
   test_map_basic_bounds \
-  test_map_basic_compare
+  test_map_basic_compare \
+  test_map_basic_insert_equal \
+  test_map_basic_exception_safety \
+  test_map_basic_operator_bracket_insert \
+  test_map_basic_copy_assign_self \
+  test_map_basic_iterators_strict
 
 STRESS_MAP_FILES := \
   test_map_stress_insert \

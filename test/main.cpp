@@ -77,6 +77,11 @@ void test_map_basic_clear_swap();
 void test_map_basic_count();
 void test_map_basic_bounds();
 void test_map_basic_compare();
+void test_map_basic_insert_equal();
+void test_map_basic_exception_safety();
+void test_map_basic_operator_bracket_insert();
+void test_map_basic_copy_assign_self();
+void test_map_basic_iterators_strict();
 #endif
 
 #if TEST_MAP_STRESS
@@ -236,6 +241,11 @@ void test_map_dispatch()
     test_map_basic_count();
     test_map_basic_bounds();
     test_map_basic_compare();
+    test_map_basic_insert_equal();
+    test_map_basic_exception_safety();
+    test_map_basic_operator_bracket_insert();
+    test_map_basic_copy_assign_self();
+    test_map_basic_iterators_strict();
 #else
     (void)0;
 #endif
