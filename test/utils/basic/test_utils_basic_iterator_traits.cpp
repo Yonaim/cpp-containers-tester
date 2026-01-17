@@ -23,7 +23,7 @@ void test_utils_basic_iterator_traits()
     std::cout << "pointer:    " << type_name_string<ptr_t>::value() << '\n';
     std::cout << "reference:  " << type_name_string<ref_t>::value() << '\n';
     std::cout << "diff_type:  " << type_name_string<diff_t>::value() << '\n';
-    std::cout << "category:   " << type_name_string<cat_t>::value() << '\n';
+    // std::cout << "category:   " << type_name_string<cat_t>::value() << '\n';
 
     // ===========================================================
     // 2. const pointer specialization
