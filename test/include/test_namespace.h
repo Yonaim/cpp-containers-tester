@@ -26,7 +26,16 @@ namespace ft = std;
     // Use custom ft headers
     // -----------------------------
 
-    // TODO : include your implemented headers
+    #include "algorithm.h"
+    #include "ft_memory.h"
+    #include "container/map.h"
+    #include "container/stack.h"
+    #include "container/vector.h"
+    #include "container/bvector.h"
+    #include "functional.h"
+    #include "iterator.h"
+    #include "type_traits.h"
+    #include "utility.h"
 
 #endif // STD_MODE
 
