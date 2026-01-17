@@ -1,40 +1,45 @@
 # cpp-containers-tester
 
-Interactive test runner for C++ container implementations
+An interactive CLI test runner for validating custom STL-like container implementations against the C++ standard library (`std`).
+It builds and runs two variants—your implementation (e.g., `ft`) and a `std` baseline—and helps verify *observable behavior compatibility* through structured test suites.
 
-# Overview
+The runner is designed around three test categories:
 
-This repository provides an interactive CLI-based test runner to validate and compare custom STL-like container implementations against the standard library (`std`).
+- **basic** — correctness and API behavior
+- **stress** — robustness under randomized / high-volume operations
+- **perf** — performance characteristics (sanity checks / comparisons)
 
-The runner is designed to support three different categories of tests:
+---
 
-* **basic** tests focus on correctness and behavior
-* **stress** tests focus on robustness
-* **perf** tests focus on performance characteristics
+## Setup (Required)
 
-(Currently, only basic tests available)
+Before running the tester, you must point it to your container implementation headers.
 
-# Required Configuration
-
-Before using this runner, **you must configure the path to your own container implementation**.
-
-In the Makefile (or related configuration files), you will find a section similar to:
+In the repository `Makefile`, locate the configuration section:
 
 ```make
 # TODO: include your implemented containers path
-```
+````
 
-You must update this to point to the directory containing your container headers (for example, your `ft/` implementation):
+Set `YOUR_IMPL_PATH` to the directory that contains your implementation’s `include/` folder:
 
 ```make
 YOUR_IMPL_PATH = /path/to/your/containers/include
 ```
 
-Without this configuration, the runner cannot build or test your implementation correctly.
+Example (for `cpp-containers`):
 
-# Usage
+```text
+/path/to/cpp-containers/include
+```
 
-Build the runner:
+Without this configuration, the tester cannot build your implementation.
+
+---
+
+## Build & Run
+
+Build:
 
 ```bash
 make
@@ -45,3 +50,23 @@ Run from the repository root:
 ```bash
 ./containers-tester
 ```
+
+---
+
+## What this runner does
+
+* Compiles two targets:
+
+  * **ft** (your implementation)
+  * **std** (reference baseline)
+* Executes the same test suite for both
+* Produces logs to help identify behavioral differences
+
+---
+
+## Notes
+
+This project is intended as a development and validation tool for educational STL reimplementations.
+
+```
+
