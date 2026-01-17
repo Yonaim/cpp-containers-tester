@@ -68,5 +68,3 @@ Run from the repository root:
 
 This project is intended as a development and validation tool for educational STL reimplementations.
 
-```
-
