@@ -117,5 +117,9 @@ ui_print_metrics_result() {
             echo -e "${UI_CG}[METRICS PASS]${UI_C0} Structured metrics match for ${test_name}"
         fi
     fi
+    if grep -q "^TIMING:" "${metrics_log}"; then
+        echo -e "${UI_C1}Timing summary (ft vs std)${UI_C0}"
+        grep "^TIMING:" "${metrics_log}" | sed "s/^TIMING: //"
+    fi
     echo -e "${UI_C0}------------------------------------------${UI_C0}"
 }

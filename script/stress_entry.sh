@@ -21,6 +21,7 @@ main() {
   if ! compare_structured_metrics "${EXEC_STD_LOG}" "${EXEC_FT_LOG}" "${metrics_log}"; then
     metrics_fail=1
   fi
+  append_timing_summary "${EXEC_STD_LOG}" "${EXEC_FT_LOG}" "${metrics_log}"
 
   local exit_fail=0
   if ! check_exit_code "${EXEC_RC_FT}" "${EXEC_RC_STD}" "${exit_log}"; then
