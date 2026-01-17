@@ -2,7 +2,8 @@
 set -euo pipefail
 
 # Structured metrics comparison for stress/perf runs.
-# Extracts deterministic fields (e.g., ops/seed/size/checksum) and ignores timing.
+# Extracts deterministic fields (ops/seed/size/checksum) and ignores timing for
+# pass/fail. Timing metrics are reported separately for visibility.
 
 LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -35,11 +36,100 @@ _metrics_normalize_log() {
   }' "${log}" >"${out}"
 }
 
+_metrics_extract_timings() {
+  local log="$1" out="$2"
+
+  awk '
+  {
+    name=$1;
+    if (name == "") next;
+    wall=""; cpu="";
+    for (i=2; i<=NF; i++) {
+      split($i, kv, "=");
+      if (kv[1] == "wall_ms") wall=kv[2];
+      else if (kv[1] == "cpu_ms") cpu=kv[2];
+    }
+    if (wall != "" || cpu != "") {
+      printf "%s %s %s\n", name, wall, cpu;
+    }
+  }' "${log}" | sort >"${out}"
+}
+
+append_timing_summary() {
+  local std_log="$1" ft_log="$2" metrics_log="$3"
+
+  local tmp_dir tmp_std tmp_ft
+  tmp_dir="$(mktemp -d)"
+  tmp_std="${tmp_dir}/std.timings"
+  tmp_ft="${tmp_dir}/ft.timings"
+
+  _metrics_extract_timings "${std_log}" "${tmp_std}"
+  _metrics_extract_timings "${ft_log}" "${tmp_ft}"
+
+  if [[ ! -s "${tmp_std}" && ! -s "${tmp_ft}" ]]; then
+    echo "TIMING: No timing metrics found; skipping timing summary." >>"${metrics_log}"
+    rm -rf "${tmp_dir}"
+    return 0
+  fi
+
+  if [[ ! -s "${tmp_std}" || ! -s "${tmp_ft}" ]]; then
+    echo "TIMING: Timing metrics missing in one log; skipping timing summary." >>"${metrics_log}"
+    rm -rf "${tmp_dir}"
+    return 0
+  fi
+
+  echo "TIMING SUMMARY BEGIN" >>"${metrics_log}"
+  echo "TIMING SUMMARY (ft vs std) ratio = ft/std" >>"${metrics_log}"
+  printf "%-32s %10s %10s %8s %10s %10s %8s\n" \
+    "TEST" "FT_WALL" "STD_WALL" "X" "FT_CPU" "STD_CPU" "X" >>"${metrics_log}"
+  awk '
+    FNR==NR { ft_wall[$1]=$2; ft_cpu[$1]=$3; next }
+    {
+      name=$1;
+      std_wall=$2;
+      std_cpu=$3;
+      ftw=ft_wall[name];
+      ftc=ft_cpu[name];
+      if (ftw == "" && ftc == "") {
+        printf "%-32s %10s %10s %8s %10s %10s %8s\n", name, "-", std_wall, "-", "-", std_cpu, "-";
+        next;
+      }
+      ratio_wall = (std_wall != "" && std_wall > 0) ? ftw / std_wall : 0;
+      ratio_cpu = (std_cpu != "" && std_cpu > 0) ? ftc / std_cpu : 0;
+      printf "%-32s %10s %10s %7.2fx %10s %10s %7.2fx\n",
+        name, ftw, std_wall, ratio_wall, ftc, std_cpu, ratio_cpu;
+      if (std_wall != "" && std_wall > 0) {
+        total_std_wall += std_wall;
+        total_ft_wall += ftw;
+      }
+      if (std_cpu != "" && std_cpu > 0) {
+        total_std_cpu += std_cpu;
+        total_ft_cpu += ftc;
+      }
+    }
+    END {
+      if (total_std_wall > 0) {
+        printf "%-32s %10s %10s %7.2fx %10s %10s %8s\n",
+          "TOTAL(wall)", total_ft_wall, total_std_wall, total_ft_wall / total_std_wall,
+          "-", "-", "-";
+      }
+      if (total_std_cpu > 0) {
+        printf "%-32s %10s %10s %7.2fx %10s %10s %8s\n",
+          "TOTAL(cpu)", "-", "-", "-", total_ft_cpu, total_std_cpu, total_ft_cpu / total_std_cpu;
+      }
+    }' "${tmp_ft}" "${tmp_std}" >>"${metrics_log}"
+  echo "TIMING SUMMARY END" >>"${metrics_log}"
+
+  rm -rf "${tmp_dir}"
+  return 0
+}
+
 # Usage: compare_structured_metrics <std_log> <ft_log> <metrics_log>
 compare_structured_metrics() {
   local std_log="$1" ft_log="$2" metrics_log="$3"
 
   : >"${metrics_log}"
+  echo "METRICS PASS CRITERIA: ops/seed/size/checksum must match per test; timings are informational only." >>"${metrics_log}"
 
   local tmp_dir tmp_std tmp_ft
   tmp_dir="$(mktemp -d)"
@@ -56,16 +146,21 @@ compare_structured_metrics() {
   fi
 
   if [[ ! -s "${tmp_std}" || ! -s "${tmp_ft}" ]]; then
-    echo "Structured metrics missing in one log." >>"${metrics_log}"
+    echo "Structured metrics missing in one log (expected ops/seed/size/checksum per test)." >>"${metrics_log}"
     rm -rf "${tmp_dir}"
     return 1
   fi
 
-  diff -u "${tmp_std}" "${tmp_ft}" >"${metrics_log}" || {
+  local tmp_diff
+  tmp_diff="${tmp_dir}/metrics.diff"
+  if ! diff -u "${tmp_std}" "${tmp_ft}" >"${tmp_diff}"; then
+    echo "Structured metrics mismatch (ops/seed/size/checksum per test)." >>"${metrics_log}"
+    cat "${tmp_diff}" >>"${metrics_log}"
     rm -rf "${tmp_dir}"
     return 1
-  }
+  fi
 
+  echo "Structured metrics match (ops/seed/size/checksum per test)." >>"${metrics_log}"
   rm -rf "${tmp_dir}"
   return 0
 }

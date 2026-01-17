@@ -117,5 +117,18 @@ ui_print_metrics_result() {
             echo -e "${UI_CG}[METRICS PASS]${UI_C0} Structured metrics match for ${test_name}"
         fi
     fi
+    if grep -q "^METRICS PASS CRITERIA:" "${metrics_log}"; then
+        echo -e "${UI_Cx}$(grep "^METRICS PASS CRITERIA:" "${metrics_log}")${UI_C0}"
+    fi
+    if grep -q "^TIMING SUMMARY BEGIN$" "${metrics_log}"; then
+        echo -e "${UI_C1}Timing summary (ft vs std)${UI_C0}"
+        awk '
+          found {
+            if ($0 ~ /^TIMING SUMMARY END$/) { exit }
+            print
+          }
+          /^TIMING SUMMARY BEGIN$/ { found=1 }
+        ' "${metrics_log}"
+    fi
     echo -e "${UI_C0}------------------------------------------${UI_C0}"
 }
