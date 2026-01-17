@@ -12,7 +12,9 @@ void test_bvector_basic_comparisons()
 
     bool a1[] = {false, true, false, true};
     bool a2[] = {false, true, false, true};
-    bool b1[] = {false, true, true};
+
+    // b is a strict prefix of a, so b < a must hold in lexicographical order
+    bool b1[] = {false, true, false};
 
     ft::vector<bool> a(a1, a1 + 4);
     ft::vector<bool> a_copy(a2, a2 + 4);
@@ -21,7 +23,7 @@ void test_bvector_basic_comparisons()
     assert(a == a_copy);
     assert(!(a != a_copy));
 
-    // lexicographical compare
+    // lexicographical compare (prefix rule)
     assert(b < a);
     assert(b <= a);
     assert(!(b > a));

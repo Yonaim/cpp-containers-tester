@@ -16,7 +16,7 @@ void test_bvector_basic_capacity()
 
     v.reserve(100);
     assert(v.capacity() >= 100);
-    std::cout << "After reserve(100): size=" << v.size() << ", cap=" << v.capacity() << '\n';
+    std::cout << "After reserve(100): size=" << v.size() << '\n';
 
     for (size_t i = 0; i < 80; ++i)
         v.push_back((i % 3) == 0);

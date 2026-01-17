@@ -13,8 +13,8 @@ void test_bvector_basic_push_pop()
     print_section("bvector push_back/pop_back");
 
     ft::vector<bool> v;
-    size_t cap_changes = 0;
-    size_t last_cap = v.capacity();
+    size_t           cap_changes = 0;
+    size_t           last_cap = v.capacity();
 
     for (size_t i = 0; i < 256; ++i)
     {
@@ -38,6 +38,6 @@ void test_bvector_basic_push_pop()
     for (size_t i = 0; i < v.size(); ++i)
         assert(v[i] == bit_of(i));
 
-    std::cout << "capacity changed " << cap_changes << " times while pushing 256 bits\n";
+    // std::cout << "capacity changed " << cap_changes << " times while pushing 256 bits\n";
     print_section("bvector push/pop OK");
 }

@@ -42,5 +42,5 @@ void test_bvector_basic_resize_reserve()
     assert(v.size() == 0);
     assert(v.capacity() == old_cap);
 
-    std::cout << "reserve+resize ok, cap=" << v.capacity() << "\n";
+    std::cout << "reserve+resize ok" << "\n";
 }

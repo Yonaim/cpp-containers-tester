@@ -4,7 +4,6 @@
 #include <cstddef>
 #include <iostream>
 #include <vector>
-
 #include "test_config.h"
 #include "test_namespace.h"
 #include "test_print.h"
@@ -40,9 +39,9 @@ void test_bvector_stress_random_ops()
     FILE_BANNER();
     print_section("bvector stress — random ops (oracle: std::vector<unsigned char>)");
 
-    ft::vector<bool> v;
+    ft::vector<bool>           v;
     std::vector<unsigned char> ref;
-    Lcg rng(0xC0FFEEu);
+    Lcg                        rng(0xC0FFEEu);
 
     const size_t STEPS = 5000;
     const size_t MAX_N = 512;
@@ -73,7 +72,7 @@ void test_bvector_stress_random_ops()
             if (ref.size() < MAX_N)
             {
                 size_t pos = rng.next_idx(ref.size() + 1);
-                bool b = rng.next_bit();
+                bool   b = rng.next_bit();
                 v.insert(v.begin() + (typename ft::vector<bool>::difference_type)pos, b);
                 ref.insert(ref.begin() + (std::ptrdiff_t)pos, (unsigned char)(b ? 1 : 0));
             }
@@ -94,7 +93,7 @@ void test_bvector_stress_random_ops()
             if (!ref.empty())
             {
                 size_t pos = rng.next_idx(ref.size());
-                bool cur = (ref[pos] != 0);
+                bool   cur = (ref[pos] != 0);
                 v[pos] = !cur;
                 ref[pos] = (unsigned char)(cur ? 0 : 1);
             }
@@ -117,7 +116,7 @@ void test_bvector_stress_random_ops()
         {
             // resize
             size_t new_sz = (size_t)(rng.next_u32() % (MAX_N + 1));
-            bool fill = rng.next_bit();
+            bool   fill = rng.next_bit();
             v.resize(new_sz, fill);
             ref.resize(new_sz, (unsigned char)(fill ? 1 : 0));
         }
@@ -148,5 +147,5 @@ void test_bvector_stress_random_ops()
     }
 
     full_check(v, ref);
-    std::cout << "Final size=" << v.size() << ", cap=" << v.capacity() << "\n";
+    std::cout << "Final size=" << v.size() << "\n";
 }
