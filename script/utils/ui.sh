@@ -96,3 +96,26 @@ ui_print_exit_code_result() {
   echo "  ft  : ${rc_ft} (${ft_tag})"
   echo "  std : ${rc_std} (${std_tag})"
 }
+
+ui_print_metrics_result() {
+    local test_name="$1"
+    local ft_log="$2"
+    local std_log="$3"
+    local metrics_log="$4"
+    local metrics_rc="$5"
+
+    echo -e "${UI_C0}------------------------------------------${UI_C0}"
+    if [[ "${metrics_rc}" -ne 0 ]]; then
+        echo -e "${UI_CR}[METRICS FAIL]${UI_C0} Structured metrics mismatch for ${test_name}"
+        echo -e "${UI_Cx}FT log : ${ft_log}${UI_C0}"
+        echo -e "${UI_Cx}STD log: ${std_log}${UI_C0}"
+        echo -e "${UI_Cx}METRICS: ${metrics_log}${UI_C0}"
+    else
+        if grep -q "No structured metrics found" "${metrics_log}"; then
+            echo -e "${UI_CY}[METRICS SKIP]${UI_C0} No structured metrics found for ${test_name}"
+        else
+            echo -e "${UI_CG}[METRICS PASS]${UI_C0} Structured metrics match for ${test_name}"
+        fi
+    fi
+    echo -e "${UI_C0}------------------------------------------${UI_C0}"
+}
