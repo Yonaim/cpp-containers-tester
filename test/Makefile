@@ -143,7 +143,8 @@ BASIC_VECTOR_FILES := \
 STRESS_VECTOR_FILES := \
   test_vector_stress_push_back \
   test_vector_stress_insert \
-  test_vector_stress_erase
+  test_vector_stress_erase \
+  test_vector_stress_buffer_ram
 
 PERF_VECTOR_FILES := \
   test_vector_perf_push_back \
@@ -221,7 +222,8 @@ BASIC_MAP_FILES := \
 
 STRESS_MAP_FILES := \
   test_map_stress_insert \
-  test_map_stress_erase
+  test_map_stress_erase \
+  test_map_stress_sum_determinism
 
 PERF_MAP_FILES := \
   test_map_perf_insert \
