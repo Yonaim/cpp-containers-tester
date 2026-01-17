@@ -78,8 +78,10 @@ append_timing_summary() {
     return 0
   fi
 
-  echo "TIMING: Summary (ft vs std) for wall_ms/cpu_ms (ratio = ft/std)." >>"${metrics_log}"
-
+  echo "TIMING SUMMARY BEGIN" >>"${metrics_log}"
+  echo "TIMING SUMMARY (ft vs std) ratio = ft/std" >>"${metrics_log}"
+  printf "%-32s %10s %10s %8s %10s %10s %8s\n" \
+    "TEST" "FT_WALL" "STD_WALL" "X" "FT_CPU" "STD_CPU" "X" >>"${metrics_log}"
   awk '
     FNR==NR { ft_wall[$1]=$2; ft_cpu[$1]=$3; next }
     {
@@ -89,12 +91,12 @@ append_timing_summary() {
       ftw=ft_wall[name];
       ftc=ft_cpu[name];
       if (ftw == "" && ftc == "") {
-        printf "TIMING: %s missing ft timings\n", name;
+        printf "%-32s %10s %10s %8s %10s %10s %8s\n", name, "-", std_wall, "-", "-", std_cpu, "-";
         next;
       }
       ratio_wall = (std_wall != "" && std_wall > 0) ? ftw / std_wall : 0;
       ratio_cpu = (std_cpu != "" && std_cpu > 0) ? ftc / std_cpu : 0;
-      printf "TIMING: %s wall_ms ft=%s std=%s ratio=%.2fx | cpu_ms ft=%s std=%s ratio=%.2fx\n",
+      printf "%-32s %10s %10s %7.2fx %10s %10s %7.2fx\n",
         name, ftw, std_wall, ratio_wall, ftc, std_cpu, ratio_cpu;
       if (std_wall != "" && std_wall > 0) {
         total_std_wall += std_wall;
@@ -107,14 +109,16 @@ append_timing_summary() {
     }
     END {
       if (total_std_wall > 0) {
-        printf "TIMING: TOTAL wall_ms ft=%s std=%s ratio=%.2fx\n",
-          total_ft_wall, total_std_wall, total_ft_wall / total_std_wall;
+        printf "%-32s %10s %10s %7.2fx %10s %10s %8s\n",
+          "TOTAL(wall)", total_ft_wall, total_std_wall, total_ft_wall / total_std_wall,
+          "-", "-", "-";
       }
       if (total_std_cpu > 0) {
-        printf "TIMING: TOTAL cpu_ms ft=%s std=%s ratio=%.2fx\n",
-          total_ft_cpu, total_std_cpu, total_ft_cpu / total_std_cpu;
+        printf "%-32s %10s %10s %7.2fx %10s %10s %8s\n",
+          "TOTAL(cpu)", "-", "-", "-", total_ft_cpu, total_std_cpu, total_ft_cpu / total_std_cpu;
       }
     }' "${tmp_ft}" "${tmp_std}" >>"${metrics_log}"
+  echo "TIMING SUMMARY END" >>"${metrics_log}"
 
   rm -rf "${tmp_dir}"
   return 0
@@ -125,6 +129,7 @@ compare_structured_metrics() {
   local std_log="$1" ft_log="$2" metrics_log="$3"
 
   : >"${metrics_log}"
+  echo "METRICS PASS CRITERIA: ops/seed/size/checksum must match per test; timings are informational only." >>"${metrics_log}"
 
   local tmp_dir tmp_std tmp_ft
   tmp_dir="$(mktemp -d)"
@@ -146,10 +151,14 @@ compare_structured_metrics() {
     return 1
   fi
 
-  diff -u "${tmp_std}" "${tmp_ft}" >"${metrics_log}" || {
+  local tmp_diff
+  tmp_diff="${tmp_dir}/metrics.diff"
+  if ! diff -u "${tmp_std}" "${tmp_ft}" >"${tmp_diff}"; then
+    echo "Structured metrics mismatch (ops/seed/size/checksum per test)." >>"${metrics_log}"
+    cat "${tmp_diff}" >>"${metrics_log}"
     rm -rf "${tmp_dir}"
     return 1
-  }
+  fi
 
   echo "Structured metrics match (ops/seed/size/checksum per test)." >>"${metrics_log}"
   rm -rf "${tmp_dir}"
