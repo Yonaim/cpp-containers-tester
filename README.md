@@ -1,5 +1,7 @@
 # cpp-containers-tester
 
+![start-screen](/docs/start-screen.png)
+
 An interactive CLI test runner for validating custom STL-like container implementations against the C++ standard library (`std`).
 It builds and runs two variants—your implementation (e.g., `ft`) and a `std` baseline—and helps verify *observable behavior compatibility* through structured test suites.
 
@@ -8,6 +10,11 @@ The runner is designed around three test categories:
 - **basic** — correctness and API behavior
 - **stress** — robustness under randomized / high-volume operations
 - **perf** — performance characteristics (sanity checks / comparisons)
+
+Below image is an example of the 'basic' test. (internally using `diff` command)
+
+![basic](/docs/basic.png)
+
 
 ---
 
