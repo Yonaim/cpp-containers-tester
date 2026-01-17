@@ -31,6 +31,17 @@ namespace ft = std;
     #define TEST_VECTOR_PERF 0
 #endif
 
+// BVector
+#ifndef TEST_BVECTOR_BASIC
+    #define TEST_BVECTOR_BASIC 0
+#endif
+#ifndef TEST_BVECTOR_STRESS
+    #define TEST_BVECTOR_STRESS 0
+#endif
+#ifndef TEST_BVECTOR_PERF
+    #define TEST_BVECTOR_PERF 0
+#endif
+
 // Map
 #ifndef TEST_MAP_BASIC
     #define TEST_MAP_BASIC 0

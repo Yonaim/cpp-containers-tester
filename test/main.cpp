@@ -4,6 +4,7 @@
 
 void test_utils_dispatch();
 void test_vector_dispatch();
+void test_bvector_dispatch();
 void test_map_dispatch();
 void test_stack_dispatch();
 
@@ -63,6 +64,30 @@ void test_vector_stress_buffer_ram();
 void test_vector_perf_push_back();
 void test_vector_perf_random_access();
 void test_vector_perf_reallocation();
+#endif
+
+// ---------- BVECTOR (vector<bool>) ----------
+#if TEST_BVECTOR_BASIC
+void test_bvector_basic_constructors();
+void test_bvector_basic_assignment();
+void test_bvector_basic_capacity();
+void test_bvector_basic_element_access();
+void test_bvector_basic_at_exception();
+void test_bvector_basic_iterators();
+void test_bvector_basic_insert_erase();
+void test_bvector_basic_push_pop();
+void test_bvector_basic_resize_reserve();
+void test_bvector_basic_clear();
+void test_bvector_basic_comparisons();
+void test_bvector_basic_proxy_reference();
+#endif
+
+#if TEST_BVECTOR_STRESS
+void test_bvector_stress_random_ops();
+#endif
+
+#if TEST_BVECTOR_PERF
+void test_bvector_perf_dummy();
 #endif
 
 // ---------- Map ----------
@@ -132,6 +157,12 @@ int main()
 #if TEST_VECTOR_BASIC || TEST_VECTOR_STRESS || TEST_VECTOR_PERF
     print_module_banner("Vector Tests");
     test_vector_dispatch();
+#endif
+
+    // ===== BVECTOR =====
+#if TEST_BVECTOR_BASIC || TEST_BVECTOR_STRESS || TEST_BVECTOR_PERF
+    print_module_banner("BVector Tests");
+    test_bvector_dispatch();
 #endif
 
     // ===== Map =====
@@ -227,6 +258,41 @@ void test_vector_dispatch()
 #endif
 }
 
+void test_bvector_dispatch()
+{
+#if TEST_BVECTOR_BASIC
+    print_section("BVector BASIC");
+    test_bvector_basic_constructors();
+    test_bvector_basic_assignment();
+    test_bvector_basic_capacity();
+    test_bvector_basic_element_access();
+    test_bvector_basic_at_exception();
+    test_bvector_basic_push_pop();
+    test_bvector_basic_insert_erase();
+    test_bvector_basic_clear();
+    test_bvector_basic_resize_reserve();
+    test_bvector_basic_iterators();
+    test_bvector_basic_comparisons();
+    test_bvector_basic_proxy_reference();
+#else
+    (void)0;
+#endif
+
+#if TEST_BVECTOR_STRESS
+    print_section("BVector STRESS");
+    test_bvector_stress_random_ops();
+#else
+    (void)0;
+#endif
+
+#if TEST_BVECTOR_PERF
+    print_section("BVector PERF");
+    test_bvector_perf_dummy();
+#else
+    (void)0;
+#endif
+}
+
 void test_map_dispatch()
 {
 #if TEST_MAP_BASIC
@@ -300,11 +366,12 @@ void test_stack_dispatch()
 #endif
 }
 
-// Optional: one-shot runner in the requested order: Utils -> Vector -> Map -> Stack
+// Optional: one-shot runner in the requested order: Utils -> Vector -> BVector -> Map -> Stack
 void test_all_dispatch()
 {
     test_utils_dispatch();
     test_vector_dispatch();
+    test_bvector_dispatch();
     test_map_dispatch();
     test_stack_dispatch();
 }

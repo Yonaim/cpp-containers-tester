@@ -27,14 +27,14 @@ _execute_validate_type() {
 }
 
 _execute_validate_module() {
-  case "${1}" in utils|vector|map|stack) : ;; *) ui_print_die "Invalid module: ${1} (use utils|vector|map|stack)" ;; esac
+  case "${1}" in utils|vector|bvector|map|stack) : ;; *) ui_print_die "Invalid module: ${1} (use utils|vector|bvector|map|stack)" ;; esac
 }
 
 _execute_usage() {
   local type="$1"
   cat <<EOF2
 Usage:
-  $(basename "$0") <utils|vector|map|stack> [--makefile PATH] ${type:+}
+  $(basename "$0") <utils|vector|bvector|map|stack> [--makefile PATH] ${type:+}
 
 Options:
   --makefile PATH   Override Makefile path (default: <root>/test/Makefile)
@@ -42,6 +42,7 @@ Options:
   -h, --help        Show this help
 EOF2
 }
+
 
 # Globals exported by execute_run_case (consumed by entry scripts)
 EXEC_GROUP=""
