@@ -9,8 +9,7 @@ CXXSTD         := c++98
 THIS_MAKEFILE := $(lastword $(MAKEFILE_LIST))
 MKDIR         := $(dir $(abspath $(THIS_MAKEFILE)))
 # TODO: include your implemented containers path (relative to this Makefile)
-YOUR_IMPL_PATH = #/path/to/your/containers/include
-# ex) YOUR_IMPL_PATH = $(abspath $(MKDIR)/../../include/ft)
+YOUR_IMPL_PATH = $(abspath $(MKDIR)/../../include/ft)
 
 MAKEFLAGS += --no-print-directory
 
@@ -160,6 +159,42 @@ STRESS_VECTOR_SRCS := \
 PERF_VECTOR_SRCS   := \
   $(call mk_path,$(VECTOR_PERF_DIR),,$(PERF_VECTOR_FILES))
 
+# ============================= BVECTOR SOURCES ============================== #
+
+BVECTOR_DIR        := $(TEST_DIR)/bvector
+BVECTOR_BASIC_DIR  := $(BVECTOR_DIR)/basic
+BVECTOR_STRESS_DIR := $(BVECTOR_DIR)/stress
+BVECTOR_PERF_DIR   := $(BVECTOR_DIR)/perf
+
+BASIC_BVECTOR_FILES := \
+  test_bvector_basic_constructors \
+  test_bvector_basic_assignment \
+  test_bvector_basic_capacity \
+  test_bvector_basic_element_access \
+  test_bvector_basic_at_exception \
+  test_bvector_basic_push_pop \
+  test_bvector_basic_insert_erase \
+  test_bvector_basic_clear \
+  test_bvector_basic_resize_reserve \
+  test_bvector_basic_iterators \
+  test_bvector_basic_comparisons \
+  test_bvector_basic_proxy_reference
+
+STRESS_BVECTOR_FILES := \
+  test_bvector_stress_random_ops
+
+PERF_BVECTOR_FILES := \
+  test_bvector_perf_dummy
+
+BASIC_BVECTOR_SRCS  := \
+  $(call mk_path,$(BVECTOR_BASIC_DIR),,$(BASIC_BVECTOR_FILES))
+
+STRESS_BVECTOR_SRCS := \
+  $(call mk_path,$(BVECTOR_STRESS_DIR),,$(STRESS_BVECTOR_FILES))
+
+PERF_BVECTOR_SRCS   := \
+  $(call mk_path,$(BVECTOR_PERF_DIR),,$(PERF_BVECTOR_FILES))
+
 # ============================== MAP SOURCES ================================= #
 
 MAP_DIR        := $(TEST_DIR)/map
@@ -243,25 +278,28 @@ PERF_BIN_PREFIX   := $(BIN_DIR)/$(NAMESPACE)_perf
 # bin
 BASIC_UTILS_BIN  := $(BASIC_BIN_PREFIX)_utils
 BASIC_VECTOR_BIN := $(BASIC_BIN_PREFIX)_vector
+BASIC_BVECTOR_BIN := $(BASIC_BIN_PREFIX)_bvector
 BASIC_MAP_BIN    := $(BASIC_BIN_PREFIX)_map
 BASIC_STACK_BIN  := $(BASIC_BIN_PREFIX)_stack
 
 STRESS_UTILS_BIN  := $(STRESS_BIN_PREFIX)_utils
 STRESS_VECTOR_BIN := $(STRESS_BIN_PREFIX)_vector
+STRESS_BVECTOR_BIN := $(STRESS_BIN_PREFIX)_bvector
 STRESS_MAP_BIN    := $(STRESS_BIN_PREFIX)_map
 STRESS_STACK_BIN  := $(STRESS_BIN_PREFIX)_stack
 
 PERF_UTILS_BIN  := $(PERF_BIN_PREFIX)_utils
 PERF_VECTOR_BIN := $(PERF_BIN_PREFIX)_vector
+PERF_BVECTOR_BIN := $(PERF_BIN_PREFIX)_bvector
 PERF_MAP_BIN    := $(PERF_BIN_PREFIX)_map
 PERF_STACK_BIN  := $(PERF_BIN_PREFIX)_stack
 
 # ================================ TARGETS ================================ #
 
 .PHONY: all basic_all stress_all perf_all \
-        basic_utils basic_vector basic_map basic_stack \
-        stress_utils stress_vector stress_map stress_stack \
-        perf_utils perf_vector perf_map perf_stack \
+        basic_utils basic_vector basic_bvector basic_map basic_stack \
+        stress_utils stress_vector stress_bvector stress_map stress_stack \
+        perf_utils perf_vector perf_bvector perf_map perf_stack \
         clean fclean re
 
 all: basic_all stress_all perf_all
@@ -271,23 +309,27 @@ all: basic_all stress_all perf_all
 # src
 BASIC_UTILS_ALL_SRCS  := $(MAIN_SRC) $(BASIC_UTILS_SRCS)  $(UTILS_DISPATCH_SRC)
 BASIC_VECTOR_ALL_SRCS := $(MAIN_SRC) $(BASIC_VECTOR_SRCS) $(VECTOR_DISPATCH_SRC)
+BASIC_BVECTOR_ALL_SRCS := $(MAIN_SRC) $(BASIC_BVECTOR_SRCS) $(BVECTOR_DISPATCH_SRC)
 BASIC_MAP_ALL_SRCS    := $(MAIN_SRC) $(BASIC_MAP_SRCS)    $(MAP_ALL_PARTS_SRC)
 BASIC_STACK_ALL_SRCS  := $(MAIN_SRC) $(BASIC_STACK_SRCS)  $(STACK_DISPATCH_SRC)
 
 # obj
 BASIC_UTILS_OBJS  := $(call to_obj,$(OBJ_BASIC_DIR),$(BASIC_UTILS_ALL_SRCS))
 BASIC_VECTOR_OBJS := $(call to_obj,$(OBJ_BASIC_DIR),$(BASIC_VECTOR_ALL_SRCS))
+BASIC_BVECTOR_OBJS := $(call to_obj,$(OBJ_BASIC_DIR),$(BASIC_BVECTOR_ALL_SRCS))
 BASIC_MAP_OBJS    := $(call to_obj,$(OBJ_BASIC_DIR),$(BASIC_MAP_ALL_SRCS))
 BASIC_STACK_OBJS  := $(call to_obj,$(OBJ_BASIC_DIR),$(BASIC_STACK_ALL_SRCS))
 
 # .d
-BASIC_DEPS := $(BASIC_UTILS_OBJS:.o=.d) $(BASIC_VECTOR_OBJS:.o=.d) \
+BASIC_DEPS := $(BASIC_UTILS_OBJS:.o=.d) $(BASIC_VECTOR_OBJS:.o=.d) $(BASIC_BVECTOR_OBJS:.o=.d) \
               $(BASIC_MAP_OBJS:.o=.d)  $(BASIC_STACK_OBJS:.o=.d)
 
-basic_all: $(BASIC_UTILS_BIN) $(BASIC_VECTOR_BIN) $(BASIC_MAP_BIN) $(BASIC_STACK_BIN)
+
+basic_all: $(BASIC_UTILS_BIN) $(BASIC_VECTOR_BIN) $(BASIC_BVECTOR_BIN) $(BASIC_MAP_BIN) $(BASIC_STACK_BIN)
 
 basic_utils:  $(BASIC_UTILS_BIN)
 basic_vector: $(BASIC_VECTOR_BIN)
+basic_bvector: $(BASIC_BVECTOR_BIN)
 basic_map:    $(BASIC_MAP_BIN)
 basic_stack:  $(BASIC_STACK_BIN)
 
@@ -301,6 +343,11 @@ $(BASIC_VECTOR_BIN): $(BASIC_VECTOR_OBJS)
 	@mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS_BASIC) $^ $(LDFLAGS) $(LDLIBS) -o $@
 
+$(BASIC_BVECTOR_BIN): CXXFLAGS_BASIC += -DTEST_BVECTOR_BASIC=1
+$(BASIC_BVECTOR_BIN): $(BASIC_BVECTOR_OBJS)
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $(CXXFLAGS_BASIC) $^ $(LDFLAGS) $(LDLIBS) -o $@
+	
 $(BASIC_MAP_BIN): CXXFLAGS_BASIC += -DTEST_MAP_BASIC=1
 $(BASIC_MAP_BIN): $(BASIC_MAP_OBJS)
 	@mkdir -p $(BIN_DIR)
@@ -318,21 +365,24 @@ $(OBJ_BASIC_DIR)/%.o: %.cpp
 
 STRESS_UTILS_ALL_SRCS  := $(MAIN_SRC) $(STRESS_UTILS_SRCS)  $(UTILS_DISPATCH_SRC)
 STRESS_VECTOR_ALL_SRCS := $(MAIN_SRC) $(STRESS_VECTOR_SRCS) $(VECTOR_DISPATCH_SRC)
+STRESS_BVECTOR_ALL_SRCS := $(MAIN_SRC) $(STRESS_BVECTOR_SRCS) $(BVECTOR_DISPATCH_SRC)
 STRESS_MAP_ALL_SRCS    := $(MAIN_SRC) $(STRESS_MAP_SRCS)    $(MAP_ALL_PARTS_SRC)
 STRESS_STACK_ALL_SRCS  := $(MAIN_SRC) $(STRESS_STACK_SRCS)  $(STACK_DISPATCH_SRC)
 
 STRESS_UTILS_OBJS  := $(call to_obj,$(OBJ_STRESS_DIR),$(STRESS_UTILS_ALL_SRCS))
 STRESS_VECTOR_OBJS := $(call to_obj,$(OBJ_STRESS_DIR),$(STRESS_VECTOR_ALL_SRCS))
+STRESS_BVECTOR_OBJS := $(call to_obj,$(OBJ_STRESS_DIR),$(STRESS_BVECTOR_ALL_SRCS))
 STRESS_MAP_OBJS    := $(call to_obj,$(OBJ_STRESS_DIR),$(STRESS_MAP_ALL_SRCS))
 STRESS_STACK_OBJS  := $(call to_obj,$(OBJ_STRESS_DIR),$(STRESS_STACK_ALL_SRCS))
 
-STRESS_DEPS := $(STRESS_UTILS_OBJS:.o=.d) $(STRESS_VECTOR_OBJS:.o=.d) \
+STRESS_DEPS := $(STRESS_UTILS_OBJS:.o=.d) $(STRESS_VECTOR_OBJS:.o=.d) $(STRESS_BVECTOR_OBJS:.o=.d) \
                $(STRESS_MAP_OBJS:.o=.d)  $(STRESS_STACK_OBJS:.o=.d)
-
-stress_all: $(STRESS_UTILS_BIN) $(STRESS_VECTOR_BIN) $(STRESS_MAP_BIN) $(STRESS_STACK_BIN)
+		
+stress_all: $(STRESS_UTILS_BIN) $(STRESS_VECTOR_BIN) $(STRESS_BVECTOR_BIN) $(STRESS_MAP_BIN) $(STRESS_STACK_BIN)
 
 stress_utils:  $(STRESS_UTILS_BIN)
 stress_vector: $(STRESS_VECTOR_BIN)
+stress_bvector: $(STRESS_BVECTOR_BIN)
 stress_map:    $(STRESS_MAP_BIN)
 stress_stack:  $(STRESS_STACK_BIN)
 
@@ -343,6 +393,11 @@ $(STRESS_UTILS_BIN): $(STRESS_UTILS_OBJS)
 
 $(STRESS_VECTOR_BIN): CXXFLAGS_STRESS += -DTEST_VECTOR_STRESS=1
 $(STRESS_VECTOR_BIN): $(STRESS_VECTOR_OBJS)
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $(CXXFLAGS_STRESS) $^ $(LDFLAGS) $(LDLIBS) -o $@
+
+$(STRESS_BVECTOR_BIN): CXXFLAGS_STRESS += -DTEST_BVECTOR_STRESS=1
+$(STRESS_BVECTOR_BIN): $(STRESS_BVECTOR_OBJS)
 	@mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS_STRESS) $^ $(LDFLAGS) $(LDLIBS) -o $@
 
@@ -363,21 +418,24 @@ $(OBJ_STRESS_DIR)/%.o: %.cpp
 
 PERF_UTILS_ALL_SRCS  := $(MAIN_SRC) $(PERF_UTILS_SRCS)  $(UTILS_DISPATCH_SRC)
 PERF_VECTOR_ALL_SRCS := $(MAIN_SRC) $(PERF_VECTOR_SRCS) $(VECTOR_DISPATCH_SRC)
+PERF_BVECTOR_ALL_SRCS := $(MAIN_SRC) $(PERF_BVECTOR_SRCS) $(BVECTOR_DISPATCH_SRC)
 PERF_MAP_ALL_SRCS    := $(MAIN_SRC) $(PERF_MAP_SRCS)    $(MAP_ALL_PARTS_SRC)
 PERF_STACK_ALL_SRCS  := $(MAIN_SRC) $(PERF_STACK_SRCS)  $(STACK_DISPATCH_SRC)
 
 PERF_UTILS_OBJS  := $(call to_obj,$(OBJ_PERF_DIR),$(PERF_UTILS_ALL_SRCS))
 PERF_VECTOR_OBJS := $(call to_obj,$(OBJ_PERF_DIR),$(PERF_VECTOR_ALL_SRCS))
+PERF_BVECTOR_OBJS := $(call to_obj,$(OBJ_PERF_DIR),$(PERF_BVECTOR_ALL_SRCS))
 PERF_MAP_OBJS    := $(call to_obj,$(OBJ_PERF_DIR),$(PERF_MAP_ALL_SRCS))
 PERF_STACK_OBJS  := $(call to_obj,$(OBJ_PERF_DIR),$(PERF_STACK_ALL_SRCS))
 
-PERF_DEPS := $(PERF_UTILS_OBJS:.o=.d) $(PERF_VECTOR_OBJS:.o=.d) \
+PERF_DEPS := $(PERF_UTILS_OBJS:.o=.d) $(PERF_VECTOR_OBJS:.o=.d) $(PERF_BVECTOR_OBJS:.o=.d) \
              $(PERF_MAP_OBJS:.o=.d)  $(PERF_STACK_OBJS:.o=.d)
 
-perf_all: $(PERF_UTILS_BIN) $(PERF_VECTOR_BIN) $(PERF_MAP_BIN) $(PERF_STACK_BIN)
+perf_all: $(PERF_UTILS_BIN) $(PERF_VECTOR_BIN) $(PERF_BVECTOR_BIN) $(PERF_MAP_BIN) $(PERF_STACK_BIN)
 
 perf_utils:  $(PERF_UTILS_BIN)
 perf_vector: $(PERF_VECTOR_BIN)
+perf_bvector: $(PERF_BVECTOR_BIN)
 perf_map:    $(PERF_MAP_BIN)
 perf_stack:  $(PERF_STACK_BIN)
 
@@ -388,6 +446,11 @@ $(PERF_UTILS_BIN): $(PERF_UTILS_OBJS)
 
 $(PERF_VECTOR_BIN): CXXFLAGS_PERF += -DTEST_VECTOR_PERF=1
 $(PERF_VECTOR_BIN): $(PERF_VECTOR_OBJS)
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $(CXXFLAGS_PERF) $^ $(LDFLAGS) $(LDLIBS) -o $@
+
+$(PERF_BVECTOR_BIN): CXXFLAGS_PERF += -DTEST_BVECTOR_PERF=1
+$(PERF_BVECTOR_BIN): $(PERF_BVECTOR_OBJS)
 	@mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS_PERF) $^ $(LDFLAGS) $(LDLIBS) -o $@
 

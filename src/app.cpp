@@ -17,11 +17,14 @@ static void on_sigint(int) { g_running = false; }
 
 // ====================== Menu data (created once) ====================== //
 
-static const std::vector<std::string> kModules = {"utils", "vector", "map", "stack", "all"};
+// ====================== Menu data (created once) ====================== //
+
+static const std::vector<std::string> kModules = {"utils", "vector", "bvector",
+                                                  "map",   "stack",  "all"};
 
 static const std::vector<std::string> kTypes = {"basic", "stress", "perf", "all"};
 
-static const std::vector<std::string> kAllModules = {"utils", "vector", "map", "stack"};
+static const std::vector<std::string> kAllModules = {"utils", "vector", "bvector", "map", "stack"};
 
 static const std::vector<std::string> kAllTypes = {"basic", "stress", "perf"};
 
