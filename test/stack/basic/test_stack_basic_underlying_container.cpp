@@ -10,8 +10,8 @@ void test_stack_basic_underlying_container()
     FILE_BANNER();
     print_section("Underlying container (deque vs vector)");
 
-    ft::stack<int, std::deque<int>>  sd;
-    ft::stack<int, std::vector<int>> sv;
+    ft::stack<int, std::deque<int> >  sd;
+    ft::stack<int, std::vector<int> > sv;
 
     for (int i = 0; i < 3; ++i)
     {
